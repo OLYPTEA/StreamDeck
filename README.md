@@ -46,7 +46,7 @@ Optimisation pour le **Thunderbolt** :
 Le projet utilise des techniques de filtrage pour garantir la précision des lectures analogiques :
 * **Potentiomètres :** Condensateurs de `100nF` pour le lissage du signal.
 * **Boutons :** Condensateurs de `10nF` pour le debounce matériel.
-* **Communication Écran :** Liaison série directe (3.3V TTL) sur Rx1/Tx1.
+* **Communication Écran :** Liaison série directe (3.3V TTL) sur Rx2/Tx2.
 
 ---
 
