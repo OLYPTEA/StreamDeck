@@ -1,4 +1,4 @@
-# Modular Stream Deck & Robot Controller
+# KORE DECK
 
 <p align="center">
   <img src="pictures/Picture1.jpg" width="1000">
@@ -11,12 +11,12 @@
 </p>
 
 <h3 align="center">
-A Modular ESP32-S3 Stream Deck & Robotics Control Hub
+Un Hub de Control Modulaire pour PC et Robotique/A Modular Stream Deck & Robotics Control Hub (cf : Roboti_Arm)
 </h3>
 
 ---
 
-## 🎬 Cinematic Demo
+##  Video de présentation/Cinematic Demo
 
 <p align="center">
   <video width="900" controls>
@@ -28,26 +28,22 @@ A Modular ESP32-S3 Stream Deck & Robotics Control Hub
 
 ## Description
 
-Ce projet est un **Stream Deck DIY** haute performance et modulaire.  
+Ce projet est un **Stream Deck DIY** développé dans le but d'être modulaire.  
 Conçu autour d'un **ESP32-S3**, il permet de piloter des raccourcis PC, de monitorer des ressources, mais aussi de servir de **Hub de contrôle** pour des périphériques externes (bras robotique, capteurs) via un port d'extension dédié.
 
----
-
-# Aperçu du Projet
-
-<p align="center">
-  <img src="pictures/Picture1.jpg" width="900">
-</p>
+This project is a **DIY Stream Deck** designed to be modular.  
+Built around an **ESP32-S3**, it allows you to control PC shortcuts, monitor system resources, and serve as a **control hub** for external devices (such as robotic arms and sensors) via a dedicated expansion port.
 
 ---
+
 
 # Spécifications Matérielles
 
 | Composant | Détails |
 | :--- | :--- |
 | **Microcontrôleur** | ESP32-S3 DevKit N16R8 (16MB Flash / 8MB PSRAM) |
-| **Écran** | DWIN HMI 960x480 (Interface UART, protocole DGUS II) |
-| **Saisies** | 7x Switchs mécaniques (Cherry MX) + 4x Potentiomètres analogiques |
+| **Écran** | DWIN HMI 960x240 (Interface UART, protocole DGUS II) |
+| **Capteurs** | 7x Switchs mécaniques (Cherry MX) + 4x Potentiomètres analogiques |
 | **Alimentation** | USB-C natif (Compatible **Thunderbolt** pour forte puissance) |
 | **Modularité** | Boîtier CAO avec pied indépendant et port d'extension I2C |
 
@@ -65,9 +61,25 @@ Le boîtier a été conçu sous **Fusion 360** avec une approche modulaire :
 - **Port d'extension :**  
   Sortie des ports non-utilisés (SDA/SCL, 5V, GND) sur le côté pour connecter des modules sans ouvrir le boîtier.
 
+- **Modularité du Software/Firmware**
+  Pensé dans le but d'être mobile et évolutif (rajout facile à intégrer)
+
+
+The Case was designed in **Fusion 360** using a modular approach:
+
+- **Detachable stand:**  
+  Allows for different angles or mounts (desk clamp, articulated arm).
+
+- **Expansion port:**  
+  Unused ports (SDA/SCL, 5V, GND) are routed to the side to connect modules without opening the enclosure.
+
+- **Software/Firmware Modularity**
+  Designed to be portable and scalable (easy to integrate new features)
+
+
 ---
 
-## 2. Hub Robotique
+## 2. Hub Robotique/Robotics Hub
 
 Grâce au port d'extension, le Stream Deck peut piloter un **bras robotique** (servomoteurs) via un driver **PCA9685**.
 
@@ -77,9 +89,17 @@ Grâce au port d'extension, le Stream Deck peut piloter un **bras robotique** (s
 - **Affichage temps réel :**  
   L'écran DWIN affiche l'état et la position de chaque articulation.
 
+Thanks to the expansion port, the Stream Deck can control a **robotic arm** (servo motors) via a **PCA9685** driver.
+
+- **Dynamic mapping:**  
+  The potentiometers directly control the servo angles when the `Robot` profile is selected.
+
+- **Real-time display:**  
+  The DWIN screen displays the status and position of each joint.
+
 ---
 
-## 3. Gestion de l'Énergie
+## 3. Gestion de l'Énergie/Energy Management
 
 Optimisation pour le **Thunderbolt** :
 
@@ -87,9 +107,15 @@ Optimisation pour le **Thunderbolt** :
 
 - Filtrage matériel par condensateurs (`470µF` → `1000µF`) pour stabiliser les pics de courant des moteurs.
 
+Optimization for **Thunderbolt**:
+
+- Direct power supply to peripherals (display, servos) via the **5V/Vin** line to preserve the ESP32’s internal voltage regulator.
+
+- Hardware filtering using capacitors (`470µF` → `1000µF`) to stabilize motor current spikes.
+
 ---
 
-# Schéma de Câblage (Résumé)
+# Schéma de Câblage (Résumé)/Wiring Diagram (Summary)
 
 Le projet utilise des techniques de filtrage pour garantir la précision des lectures analogiques :
 
@@ -102,41 +128,44 @@ Le projet utilise des techniques de filtrage pour garantir la précision des lec
 - **Communication Écran :**  
   Liaison série directe (`3.3V TTL`) sur `Rx2/Tx2`.
 
+The project uses filtering techniques to ensure the accuracy of analog readings:
+
+- **Potentiometers:**  
+  `100nF` capacitors for signal smoothing.
+
+- **Buttons:**  
+  `10nF` capacitors for hardware debouncing.
+
+- **Display communication:**  
+  Direct serial connection (`3.3V TTL`) on `Rx2/Tx2`.
+
 ---
 
-# Galerie
-
-<p align="center">
-  <img src="pictures/Picture1.jpg" width="850">
-</p>
-
----
-
-# Structure du Dépôt
+# Structure du Dépôt/Structure of the Repository
 
 ```text
-├── Hardware/           # Fichiers STEP/STL (Fusion 360)
-├── Firmware/           # Code source ESP32 (Arduino IDE / PlatformIO)
-├── DWIN_Project/       # Fichiers de configuration DGUS II (Interface graphique)
-├── Scripts_PC/         # Script de détection d'application (Python/C#)
-└── Assets/             # Icônes, vidéos et ressources graphiques
+├── Hardware/           # Fichiers STEP/STL (Fusion 360)/STEP/STL files (Fusion 360)
+├── Firmware/           # Code source ESP32 (Arduino IDE / PlatformIO)/ESP32 source code (Arduino IDE / PlatformIO)
+├── DWIN_Project/       # Fichiers de configuration DGUS II (Interface graphique)/DGUS II Configuration Files (Graphical Interface)
+├── Scripts_PC/         # Script de détection d'application (Python/C#)/Application detection script (Python/C#)
+└── Assets/             # Icônes, vidéos et ressources graphiques/Icons, videos, and graphic resources
 ```
 
 ---
 
 # Roadmap
 
-- [ ] Interface UI avancée
-- [ ] Gestion multi-profils
-- [ ] Intégration MQTT
-- [ ] Contrôle robotique avancé
-- [ ] Monitoring système temps réel
-- [ ] Support Wi-Fi / Bluetooth
-- [ ] Intégration Home Assistant
+- [ ] Interface UI avancée/Advanced UI
+- [ ] Gestion multi-profils/Multi-profile management
+- [ ] Intégration MQTT/MQTT integration
+- [ ] Contrôle robotique avancé/Advanced robotics control
+- [ ] Monitoring système temps réel/Real-time system monitoring
+- [ ] Support Wi-Fi / Bluetooth/Wi-Fi / Bluetooth support
+- [ ] Intégration Home Assistant/Home Assistant integration
 
 ---
 
-# Technologies Utilisées
+# Technologies Utilisées/Technologies Used
 
 - **ESP32-S3**
 - **DGUS II / DWIN HMI**
@@ -147,11 +176,20 @@ Le projet utilise des techniques de filtrage pour garantir la précision des lec
 
 ---
 
-# Auteur
+# Auteur/Author
 
-Projet conçu et développé par **OLYPTEA**.
+Projet conçu et développé par **OLYPTEA** (Sacha Gibert).
+
+Project designed and developed by **OLYPTEA** (Sacha Gibert).
 
 GitHub :  
 https://github.com/OLYPTEA
 
 ---
+
+Merci pour avoir pris le temps de regarder le projet
+
+Thank you for taking the time to look at the project
+
+---
+

@@ -1,1 +1,0 @@
-#Bilan du materiel nessecaire a ce projet
