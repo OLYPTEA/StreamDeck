@@ -11,7 +11,7 @@
 </p>
 
 <h3 align="center">
-Un Hub de Control Modulaire pour PC et Robotique/A Modular Stream Deck & Robotics Control Hub (cf : Roboti_Arm)
+Un Hub de Control Modulaire pour PC et Robotique/A Modular Stream Deck & Robotics Control Hub (cf : Robotic_Arm)
 </h3>
 
 ---
