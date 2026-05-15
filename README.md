@@ -21,6 +21,11 @@ Un Hub de Control Modulaire pour PC et Robotique/A Modular Stream Deck & Robotic
 https://github.com/user-attachments/assets/996bb6e2-c286-4f35-a489-94fb3f0be9cc
 
 
+<p align="center">
+  <img src="pictures/pcb_koredeck.png" width="1000">
+</p>
+
+
 
 ---
 
