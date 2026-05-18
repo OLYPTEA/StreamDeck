@@ -193,7 +193,7 @@ https://github.com/OLYPTEA
 
 ---
 
-Merci pour avoir pris le temps de regarder le projet
+Merci d'avoir pris le temps de regarder le projet
 
 Thank you for taking the time to look at the project
 
