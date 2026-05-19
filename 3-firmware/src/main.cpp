@@ -1,17 +1,18 @@
-// main.cpp — StreamDeck DIY — Firmware principal
+// =============================================================================
+// main.cpp — Kore Deck — Firmware principal
 //
-// Matériel : ESP32-S3-DevKitC-1 N16R8 (SPARKLE XH-S3E)
-// Auteur   : OLYPTEA (Sacha Gibert) https://github.com/OLYPTEA
+// Matériel : ESP32-S3-DevKitC-1 N16R8
+// Auteur   : OLYPTEA (Sacha Gibert) - https://github.com/OLYPTEA
 //
 // Architecture :
-//   - setup()        : initialisation matérielle + restauration état NVS
+//   - setup()        : initialisation matérielle + restauration état NVS 
 //   - loop()         : orchestration des tâches périodiques
 //   - handlePots()   : acquisition et envoi des potentiomètres
 //   - handleButtons(): détection événements boutons
 //   - handleSerial() : réception/parsing des trames PC
 //   - updateDisplay(): mise à jour de l'écran DWIN
 //   - enterCategory(): transition de catégorie
-
+// =============================================================================
 
 #include <Arduino.h>
 #include <esp_task_wdt.h>
@@ -23,9 +24,9 @@
 #include "protocol.h"
 #include "nvs_manager.h"
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // Instances globales
-
+// ─────────────────────────────────────────────────────────────────────────────
 static Potentiometer pots[POT_COUNT] = {
     Potentiometer(PIN_POT_1, 0),
     Potentiometer(PIN_POT_2, 1),
@@ -54,9 +55,9 @@ static uint32_t lastPotSampleTime   = 0;
 static uint32_t lastPCReceiveTime   = 0;
 static bool     pcConnected         = false;
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // Prototypes
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void     handlePots();
 static void     handleButtons();
 static void     handleSerial();
@@ -67,83 +68,83 @@ static void     sendPotEvent(uint8_t potIdx, uint8_t value);
 static void     checkPCConnection();
 static void     initWatchdog();
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // setup()
-
+// ─────────────────────────────────────────────────────────────────────────────
 void setup() {
-    //  USB CDC natif (déjà actif grâce aux build_flags)
+    // --- USB CDC natif (déjà actif grâce aux build_flags)
     Serial.begin(115200);
     delay(500); // Attente énumération USB
 
     Serial.println(F("[StreamDeck] Boot v2.0"));
 
-    //  Watchdog hardware
+    // --- Watchdog hardware
     initWatchdog();
 
-    //  ADC configuration (ESP32-S3)
+    // --- ADC configuration (ESP32-S3)
     analogSetAttenuation(ADC_11db);      // Plage 0-3.3V
     analogReadResolution(12);            // 12 bits
 
-    //  Initialisation potentiomètres
+    // --- Initialisation potentiomètres
     for (uint8_t i = 0; i < POT_COUNT; ++i) {
         pots[i].begin();
     }
 
-    //  Initialisation boutons
+    // --- Initialisation boutons
     for (uint8_t i = 0; i < BTN_COUNT; ++i) {
         buttons[i].begin();
     }
 
-    //  Initialisation écran DWIN
+    // --- Initialisation écran DWIN
     display.begin();
 
-    //  Restauration catégorie NVS
+    // --- Restauration catégorie NVS
     nvs.begin();
     currentCategory = nvs.loadCategory();
     nvs.end();
 
-    //  Page d'accueil DWIN
+    // --- Page d'accueil DWIN
     display.setPage(DWIN_PAGE_HOME);
     display.updatePotLabels(currentCategory);
 
-    //  Signal de boot vers le PC
+    // --- Signal de boot vers le PC
     Serial.println(F("READY"));
 
     Serial.print(F("[StreamDeck] Catégorie restaurée : "));
     Serial.println(static_cast<uint8_t>(currentCategory));
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // loop()
-
+// ─────────────────────────────────────────────────────────────────────────────
 void loop() {
-    //  Réinitialisation watchdog (preuve que la loop tourne)
+    // --- Réinitialisation watchdog (preuve que la loop tourne)
     esp_task_wdt_reset();
 
     uint32_t now = millis();
 
-    //  Tâche 1 : Lecture potentiomètres (toutes les POT_SAMPLE_PERIOD_MS)
+    // --- Tâche 1 : Lecture potentiomètres (toutes les POT_SAMPLE_PERIOD_MS)
     if (now - lastPotSampleTime >= POT_SAMPLE_PERIOD_MS) {
         lastPotSampleTime = now;
         handlePots();
     }
 
-    //  Tâche 2 : Lecture boutons (toutes les itérations, rapide)
+    // --- Tâche 2 : Lecture boutons (toutes les itérations, rapide)
     handleButtons();
 
-    //  Tâche 3 : Réception série PC
+    // --- Tâche 3 : Réception série PC
     handleSerial();
 
-    //  Tâche 4 : Vérification connexion PC
+    // --- Tâche 4 : Vérification connexion PC
     checkPCConnection();
 
-    //  Tâche 5 : Mise à jour affichage DWIN
+    // --- Tâche 5 : Mise à jour affichage DWIN
     updateDisplay();
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // handlePots() — Acquisition et envoi des potentiomètres
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void handlePots() {
     uint8_t potValues[POT_COUNT];
     bool    anyChanged = false;
@@ -163,9 +164,9 @@ static void handlePots() {
     }
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // handleButtons() — Détection et dispatch des événements boutons
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void handleButtons() {
     for (uint8_t i = 0; i < BTN_COUNT; ++i) {
         ButtonEvent evt = buttons[i].update();
@@ -206,9 +207,9 @@ static void handleButtons() {
     }
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // handleSerial() — Lecture et parsing des trames PC
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void handleSerial() {
     while (Serial.available()) {
         char c = static_cast<char>(Serial.read());
@@ -248,9 +249,9 @@ static void handleSerial() {
     }
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // updateDisplay() — Mise à jour de l'écran DWIN avec les données PC
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void updateDisplay() {
     if (!pcData.valid) return;
 
@@ -278,9 +279,9 @@ static void updateDisplay() {
     pcData.valid = false;
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // enterCategory() — Transition de catégorie avec persistance NVS
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void enterCategory(Category cat) {
     if (cat == currentCategory) return;
 
@@ -313,9 +314,9 @@ static void enterCategory(Category cat) {
     Serial.println(static_cast<uint8_t>(cat));
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // sendAction() — Envoi d'une action vers le PC
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void sendAction(const char* action) {
     if (!action) return;
     char buf[64];
@@ -323,9 +324,9 @@ static void sendAction(const char* action) {
     Serial.println(buf);
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // sendPotEvent() — Envoi d'un événement potentiomètre vers le PC
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void sendPotEvent(uint8_t potIdx, uint8_t value) {
     uint8_t catIdx = static_cast<uint8_t>(currentCategory);
     char buf[48];
@@ -334,9 +335,9 @@ static void sendPotEvent(uint8_t potIdx, uint8_t value) {
     Serial.println(buf);
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // checkPCConnection() — Détection déconnexion PC
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void checkPCConnection() {
     if (!pcConnected) return;
 
@@ -350,9 +351,9 @@ static void checkPCConnection() {
     }
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // initWatchdog() — Configuration du watchdog hardware
-
+// ─────────────────────────────────────────────────────────────────────────────
 static void initWatchdog() {
     esp_task_wdt_config_t wdtConfig = {
         .timeout_ms     = WDT_TIMEOUT_MS,

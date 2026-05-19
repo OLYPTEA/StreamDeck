@@ -1,3 +1,4 @@
+# =============================================================================
 # audio_manager.py — Contrôle audio Windows via pycaw
 #
 # Fonctionnalités :
@@ -5,7 +6,7 @@
 #   - Volume par application (Spotify, Discord, jeux)
 #   - Mute/unmute microphone
 #   - Gain microphone
-# Utilise pycaw pour interagir avec les API audio Windows.
+# =============================================================================
 
 import comtypes
 from ctypes import POINTER, cast
@@ -36,9 +37,10 @@ class AudioManager:
         self._init_master()
         self._init_microphone()
 
-    
+    # =========================================================================
     # Volume Master
-    
+    # =========================================================================
+
     def set_master_volume(self, percent: int) -> None:
         """
         Définit le volume master système.
@@ -64,10 +66,9 @@ class AudioManager:
             log.error(f"get_master_volume : {e}")
         return 0
 
-    
-    # Volume applicatif, note à moi même : faudrait peut-être faire une classe AppVolume pour éviter de dupliquer le code Spotify/Discord/Jeux????? 
-    #                                      EDIT : ouais, mais pas dans cette version, on verra plus tard
-    
+    # =========================================================================
+    # Volume applicatif
+    # =========================================================================
 
     def set_app_volume(self, process_name: str, percent: int) -> bool:
         """
@@ -105,9 +106,9 @@ class AudioManager:
     def set_discord_volume(self, percent: int) -> None:
         self.set_app_volume(config.audio.discord_process, percent)
 
-    
-    # Microphone, peu importe le processus, on mute le périphérique par défaut
-   
+    # =========================================================================
+    # Microphone
+    # =========================================================================
 
     def toggle_mic_mute(self) -> bool:
         """
@@ -146,9 +147,10 @@ class AudioManager:
         except Exception as e:
             log.error(f"set_mic_gain({percent}) : {e}")
 
-   
-    # Initialisation privée, note personnelle : j'ai mis ça dans des méthodes séparées pour éviter d'avoir un __init__ monstrueux, mais c'est peut-être un peu overkill, à voir si je rajoute d'autres périphériques plus tard ou pas
-    
+    # =========================================================================
+    # Initialisation privée
+    # =========================================================================
+
     def _init_master(self) -> None:
         """Initialise le contrôle du volume master (sortie audio)."""
         try:
@@ -174,7 +176,3 @@ class AudioManager:
                 log.info("Microphone initialisé")
         except Exception as e:
             log.error(f"Initialisation microphone : {e}")
-
-# -- TODO : on pourrait aussi ajouter une méthode pour récupérer la liste des applications avec contrôle de volume, 
-#   pour afficher une notification ou un overlay quand on change le volume d'une appli, si quelq'un est 
-#   intéressé par cette fonctionnalité, faites-moi signe, je la ferai dans une prochaine version ;) --

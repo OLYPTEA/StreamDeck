@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+/* ─── Design tokens ───────────────────────────────────────────────────────── */
+:root {
+  --bg:        #0C0C0E;
+  --s0:        #141416;   /* card surface          */
+  --s1:        #1A1A1D;   /* elevated / hover      */
+  --s2:        #212127;   /* active / pressed      */
+
+  --b0: rgba(255,255,255,0.06);
+  --b1: rgba(255,255,255,0.10);
+  --b2: rgba(255,255,255,0.16);
+
+  --t0: #ECECEF;
+  --t1: #8E8EA0;
+  --t2: #4E4E60;
+
+  --accent:    #6366F1;
+  --accent-hi: #818CF8;
+  --accent-dim: rgba(99,102,241,0.14);
+  --accent-bd:  rgba(99,102,241,0.40);
+
+  --green: #22C55E;
+  --red:   #EF4444;
+  --amber: #F59E0B;
+
+  --r-xs: 5px;
+  --r-sm: 7px;
+  --r-md: 10px;
+  --r-lg: 13px;
+}
+
+/* ─── Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+               "Segoe UI Variable", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  overflow: hidden;
+  color: var(--t0);
+}
+
+/* ─── Background ─────────────────────────────────────────────────────────── */
+body {
+  background:
+    radial-gradient(ellipse 65% 45% at 0% 0%,   rgba(99,102,241,0.06)  0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 100% 100%, rgba(99,102,241,0.04) 0%, transparent 55%),
+    var(--bg);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.09); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.16); }
+
+/* ─── Focus ──────────────────────────────────────────────────────────────── */
+*:focus-visible {
+  outline: 1.5px solid var(--accent-bd);
+  outline-offset: 2px;
+}
+
+/* ─── Inputs ─────────────────────────────────────────────────────────────── */
+input, select, textarea {
+  background: rgba(0,0,0,0.28);
+  border: 1px solid var(--b1);
+  border-radius: var(--r-xs);
+  color: var(--t0);
+  font-size: 12px;
+  font-family: inherit;
+  padding: 6px 10px;
+  width: 100%;
+  transition: border-color 0.12s, background 0.12s;
+}
+input:hover, select:hover { border-color: var(--b2); }
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent-bd);
+  background: rgba(0,0,0,0.40);
+}
+input::placeholder, textarea::placeholder { color: var(--t2); }
+select option { background: #141416; color: var(--t0); }
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  border-radius: var(--r-sm);
+  transition: all 0.12s;
+}
+button:active { transform: scale(0.97); }
+
+/* ─── Keyframes ──────────────────────────────────────────────────────────── */
+@keyframes spin  { to { transform: rotate(360deg); } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }

@@ -192,6 +192,20 @@ https://github.com/OLYPTEA
 
 ---
 
+Mention à Andrei Doncescu : https://homepages.laas.fr/adoncesc/SystemEmbed/Filtrage.pdf 
+          Random Nerds Tutorial : https://randomnerdtutorials.com/esp32-save-data-permanently-preferences/ 
+          cppreference.com : https://en.cppreference.com/cpp/language/static_cast
+          Peng Zhihui : https://github.com/peng-zhihui/HoloCubic <3
+          STMicroelectronics — AN2834 : https://www.st.com/resource/en/application_note/cd00211314-how-to-optimize-the-adc-accuracy-in-the-stm32-mcus-stmicroelectronics.pdf
+          Claude code : Débogage
+          Espressif Systems : https://documentation.espressif.com/esp32-s3_datasheet_en.pdf
+          Tauri : http://github.com/tauri-apps/tauri/blob/dev/ARCHITECTURE.md
+                  https://github.com/tauri-apps/awesome-tauri
+
+
+
+---
+
 Merci d'avoir pris le temps de regarder le projet
 
 Thank you for taking the time to look at the project

@@ -1,10 +1,11 @@
-
+# =============================================================================
 # pomodoro.py — Minuteur Pomodoro avec gestion des sessions
 #
 # Cycle standard :
-#   25 min travail -> 5 min pause courte (×4) -> 15 min pause longue
+#   25 min travail → 5 min pause courte (×4) → 15 min pause longue
 #
-# États : IDLE -> WORK -> SHORT_BREAK -> WORK -> ... -> LONG_BREAK -> WORK
+# États : IDLE → WORK → SHORT_BREAK → WORK → ... → LONG_BREAK → WORK
+# =============================================================================
 
 import time
 from enum import Enum, auto
@@ -35,9 +36,9 @@ class PomodoroTimer:
         self._paused         : bool      = False
         self._pause_elapsed  : float     = 0.0  # Temps écoulé avant pause
 
-    
+    # =========================================================================
     # Contrôles
-    
+    # =========================================================================
 
     def toggle(self) -> None:
         """Lance, met en pause ou reprend le timer selon l'état actuel."""
@@ -65,9 +66,9 @@ class PomodoroTimer:
         self._duration_sec = minutes * 60
         log.info(f"Durée Pomodoro → {minutes} min")
 
-    
+    # =========================================================================
     # Lecture de l'état
-    
+    # =========================================================================
 
     def get_remaining(self) -> Tuple[int, int]:
         """
@@ -91,9 +92,9 @@ class PomodoroTimer:
     def get_state(self) -> PomoState:
         return self._state
 
-    
+    # =========================================================================
     # Mise à jour (à appeler dans la boucle principale)
-    
+    # =========================================================================
 
     def update(self) -> None:
         """
@@ -106,9 +107,9 @@ class PomodoroTimer:
         if self._get_remaining_seconds() <= 0:
             self._on_timer_expired()
 
-    
+    # =========================================================================
     # Privé
-    
+    # =========================================================================
 
     def _start_work(self) -> None:
         self._state       = PomoState.WORK
@@ -162,4 +163,3 @@ class PomodoroTimer:
 
         elif self._state in (PomoState.SHORT_BREAK, PomoState.LONG_BREAK):
             self._start_work()
-
