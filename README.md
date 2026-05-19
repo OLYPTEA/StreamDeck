@@ -178,6 +178,7 @@ The project uses filtering techniques to ensure the accuracy of analog readings:
 - **Arduino / PlatformIO**
 - **Python / C++**
 - **I2C / UART**
+- **KicKad**
 
 ---
 
