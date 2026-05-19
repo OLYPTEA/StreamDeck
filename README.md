@@ -176,7 +176,7 @@ The project uses filtering techniques to ensure the accuracy of analog readings:
 - **DGUS II / DWIN HMI**
 - **Fusion 360**
 - **Arduino / PlatformIO**
-- **Python / C#**
+- **Python / C++**
 - **I2C / UART**
 
 ---
